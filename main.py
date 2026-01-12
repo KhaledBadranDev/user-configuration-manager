@@ -97,6 +97,33 @@ def delete_setting(settings: Dict[str, str], key: str) -> str:
         return "Setting not found!"
     
 
+def view_settings(settings: Dict[str, str]) -> str:
+    """
+    Returns a formatted string of all settings.
+    
+    Parameters:
+    settings (dict): The dictionary containing user settings.
+    
+    Returns:
+    str: A formatted string of settings or a message if empty.
+    """
+    # Check if dictionary is empty
+    if not settings:
+        return "No settings available."
+    
+    # Initialize the output string
+    output = "Current User Settings:\n"
+    
+    # Loop through the settings dictionary
+    for key, value in settings.items():
+        # Capitalize the key for display (e.g., 'theme' -> 'Theme')
+        formatted_key = key.capitalize()
+        # Append the formatted string "Key: value" followed by a newline
+        output += f"{formatted_key}: {value}\n"
+    
+    return output
+
+
 if __name__ == "__main__":
     print("--- Testing add_setting ---")
     print(add_setting(test_settings, ('THEME', 'dark')))
@@ -106,17 +133,18 @@ if __name__ == "__main__":
     print(update_setting(test_settings, ('theme', 'light')))
     
     print("\n--- Testing delete_setting ---")
+    print(delete_setting(test_settings, 'volume'))
     
-    # Test 5: Delete an existing key (should succeed)
-    # This covers Test requirement #19
-    result_delete_success = delete_setting(test_settings, 'volume')
-    print(f"Test 5 (Delete Existing): {result_delete_success}")
+    print("\n--- Testing view_settings ---")
     
-    # Test 6: Delete a non-existing key (should fail)
-    # This covers Test requirement #20
-    result_delete_fail = delete_setting(test_settings, 'language')
-    print(f"Test 6 (Delete Missing): {result_delete_fail}")
+    # Test 7: View populated settings (should show Theme and Wifi)
+    # This covers Test requirements #25, #26, #27
+    print("Scenario 1: Viewing populated settings")
+    print(view_settings(test_settings))
     
-    # Verify the dictionary was actually updated (volume should be gone)
-    # This covers Test requirement #21
-    print(f"Current Settings State: {test_settings}")
+    # Test 8: View empty settings (should show "No settings available.")
+    # This covers Test requirement #24
+    print("Scenario 2: Viewing empty settings")
+    # Create a temporary empty dictionary for this test
+    empty_settings = {}
+    print(view_settings(empty_settings))
