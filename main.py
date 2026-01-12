@@ -72,29 +72,51 @@ def update_setting(settings: Dict[str, str], setting: Tuple[str, str]) -> str:
         return f"Setting '{key}' does not exist! Cannot update a non-existing setting."
 
 
+def delete_setting(settings: Dict[str, str], key: str) -> str:
+    """
+    Deletes a specific setting from the dictionary.
+    
+    Parameters:
+    settings (dict): The dictionary containing user settings.
+    key (str): The key of the setting to delete.
+    
+    Returns:
+    str: A success or error message.
+    """
+    # Convert key to lowercase to ensure case-insensitive matching
+    key = key.lower()
+    
+    # Check if the key exists in the settings dictionary
+    if key in settings:
+        # Remove the key-value pair
+        del settings[key]
+        # Return success message
+        return f"Setting '{key}' deleted successfully!"
+    else:
+        # Return error message if key is not found
+        return "Setting not found!"
+    
+
 if __name__ == "__main__":
     print("--- Testing add_setting ---")
-    
-    # Test 1: Try to add a setting that already exists (should fail)
-    result_exist = add_setting(test_settings, ('THEME', 'dark'))
-    print(f"Test 1 (Duplicate): {result_exist}")
-    
-    # Test 2: Add a new setting (should succeed)
-    result_success = add_setting(test_settings, ('volume', 'high'))
-    print(f"Test 2 (New): {result_success}")
+    print(add_setting(test_settings, ('THEME', 'dark')))
+    print(add_setting(test_settings, ('volume', 'high')))
     
     print("\n--- Testing update_setting ---")
+    print(update_setting(test_settings, ('theme', 'light')))
     
-    # Test 3: Update an existing key (should succeed)
-    # This covers Test requirement #13
-    result_update_success = update_setting(test_settings, ('theme', 'dark'))
-    print(f"Test 3 (Update Existing): {result_update_success}")
+    print("\n--- Testing delete_setting ---")
     
-    # Test 4: Update a non-existing key (should fail)
-    # This covers Test requirement #14
-    result_update_fail = update_setting(test_settings, ('brightness', 'low'))
-    print(f"Test 4 (Update Missing): {result_update_fail}")
+    # Test 5: Delete an existing key (should succeed)
+    # This covers Test requirement #19
+    result_delete_success = delete_setting(test_settings, 'volume')
+    print(f"Test 5 (Delete Existing): {result_delete_success}")
     
-    # Verify the dictionary was actually updated
-    # This covers Test requirement #15
+    # Test 6: Delete a non-existing key (should fail)
+    # This covers Test requirement #20
+    result_delete_fail = delete_setting(test_settings, 'language')
+    print(f"Test 6 (Delete Missing): {result_delete_fail}")
+    
+    # Verify the dictionary was actually updated (volume should be gone)
+    # This covers Test requirement #21
     print(f"Current Settings State: {test_settings}")
